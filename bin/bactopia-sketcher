@@ -12,6 +12,11 @@ if [[ $# == 0 ]]; then
     exit
 fi
 
+if [[ "$1" == "version" ]] || [[ "$1" == "--version" ]]; then
+    echo "bactopia-sketcher ${VERSION}"
+    exit
+fi
+
 gzip -cd ${FASTQ} | mash sketch -o ${PREFIX}-k21 -k 21 -s 21 -r -I ${PREFIX} -
 gzip -cd ${FASTQ} | mash sketch -o ${PREFIX}-k31 -k 31 -s 31 -r -I ${PREFIX} -
 sourmash sketch dna -p k=21,k=31,k=51,abund,scaled=1000 --merge ${PREFIX} -o ${PREFIX}.sig ${FASTQ}
