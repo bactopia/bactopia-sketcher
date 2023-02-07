@@ -1,0 +1,17 @@
+#! /bin/bash
+VERSION=1.0.0
+PREFIX=$1
+FASTQ=$2
+
+# If no user input, print usage
+if [[ $# == 0 ]]; then
+    echo "bactopia-sketcher - v${VERSION}"
+    echo ""
+    echo "bactopia-sketcher <PREFIX> <FASTQ> <OPT1> ... <OPTN>"
+    echo ""
+    exit
+fi
+
+gzip -cd ${FASTQ} | mash sketch -o ${PREFIX}-k21 -k 21 -s 21 -r -I ${PREFIX} -
+gzip -cd ${FASTQ} | mash sketch -o ${PREFIX}-k31 -k 31 -s 31 -r -I ${PREFIX} -
+sourmash sketch dna -p k=21,k=31,k=51,abund,scaled=1000 --merge ${PREFIX} -o ${PREFIX}.sig ${FASTQ}
